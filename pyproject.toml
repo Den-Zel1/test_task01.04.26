@@ -1,0 +1,10 @@
+[project]
+name = "test-task01-04-26"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.13"
+dependencies = [
+    "sqlalchemy>=2.0.48",
+]
+
+
