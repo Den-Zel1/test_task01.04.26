@@ -1,7 +1,7 @@
 services:
   db:
     image: postgres:latest          # Официальный образ PostgreSQL
-    container_name: postgres_db     # Имя вашего контейнера
+    container_name: postgres_69     # Имя вашего контейнера
     restart: always                 # Перезапускать при сбоях или рестарте системы
     environment:
       - POSTGRES_USER=${DB_USER}       # Логин администратора
