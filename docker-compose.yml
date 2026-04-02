@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:latest          # Официальный образ PostgreSQL
@@ -12,7 +10,12 @@ services:
     ports:
       - "5432:5432"                 # Проброс порта: [порт на хосте]:[порт в контейнере]
     volumes:
-      - postgres_data:/var/lib/postgresql/data # Хранение данных вне контейнера
+      - ./postgres_data:/var/lib/postgresql # Хранение данных вне контейнера
+    env_file:
+      - .env
 
 volumes:
   postgres_data:                    # Именованный том для сохранения данных
+  # Пробрасываем переменные окружения из файла .env (токены, пароли почты)
+
+

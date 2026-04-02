@@ -68,7 +68,7 @@ ipython_config.py
 # ======================
 # ВАЖНО: исключить ВСЕ виртуальные окружения!
 venv/
-.venv/
+my_fastapi_app/.venv/
 env/
 ENV/
 env.bak/
@@ -169,7 +169,7 @@ Pipfile.lock
 # ======================
 # Переменные окружения
 # ======================
-.env
+../.env
 .env.local
 .env.development.local
 .env.test.local
