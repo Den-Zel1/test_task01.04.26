@@ -1,21 +1,36 @@
 services:
   db:
-    image: postgres:latest          # Официальный образ PostgreSQL
-    container_name: postgres_69     # Имя вашего контейнера
-    restart: always                 # Перезапускать при сбоях или рестарте системы
+    image: postgres:latest
+    container_name: postgres_69
+    restart: always
     environment:
-      - POSTGRES_USER=${DB_USER}       # Логин администратора
-      - POSTGRES_PASSWORD=${DB_PASSWORD} # Пароль администратора
-      - POSTGRES_DB=${DB_NAME}     # Название базы данных при создании
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
     ports:
-      - "5432:5432"                 # Проброс порта: [порт на хосте]:[порт в контейнере]
+      - "5432:5432"
     volumes:
-      - ./postgres_data:/var/lib/postgresql # Хранение данных вне контейнера
+      - ./postgres_data:/var/lib/postgresql
+    env_file:
+      - .env
+
+  # --- НОВЫЙ БЛОК: Объектное хранилище ---
+  minio:
+    image: minio/minio:latest
+    container_name: minio_storage
+    restart: always
+    ports:
+      - "9000:9000"    # Порт для API (для кода Python)
+      - "9001:9001"    # Порт для консоли (в браузере)
+    environment:
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}        # Логин (из .env или admin)
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD} # Пароль
+    volumes:
+      - ./minio_data:/data   # Данные будут лежать в папке minio_data рядом с проектом
+    command: server /data --console-address ":9001"
     env_file:
       - .env
 
 volumes:
-  postgres_data:                    # Именованный том для сохранения данных
-  # Пробрасываем переменные окружения из файла .env (токены, пароли почты)
-
-
+  postgres_data:
+  minio_data:      # Добавляем том для MinIO
