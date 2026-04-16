@@ -31,6 +31,23 @@ services:
     env_file:
       - .env
 
+  app:
+    build: .
+    container_name: fastapi_app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - minio
+    env_file:
+      - .env
+    environment:
+      # Важно: теперь приложение должно стучаться к db и minio
+      # по именам сервисов в сети Docker, а не по localhost!
+      - DB_HOST=db
+      - MINIO_ENDPOINT=http://minio:9000
+
+
 volumes:
   postgres_data:
   minio_data:      # Добавляем том для MinIO
