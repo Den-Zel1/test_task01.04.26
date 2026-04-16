@@ -16,6 +16,6 @@ class Organization(Base):
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
     name: Mapped[str] = mapped_column(String(50), unique=True, index=True, nullable=False)
     tin: Mapped[str] = mapped_column(String(20), unique=True, index=True, nullable=False)
-    logo: Mapped[Optional[str]] = mapped_column(String(500))
-
+    logo_url: Mapped[str | None] = mapped_column()  # Колонка для ссылки
+   
 
