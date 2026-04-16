@@ -13,27 +13,37 @@ services:
       - ./postgres_data:/var/lib/postgresql
     env_file:
       - .env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
-  # --- НОВЫЙ БЛОК: Объектное хранилище ---
   minio:
     image: minio/minio:latest
     container_name: minio_storage
     restart: always
     ports:
-      - "9000:9000"    # Порт для API (для кода Python)
-      - "9001:9001"    # Порт для консоли (в браузере)
+      - "9000:9000"
+      - "9001:9001"
     environment:
-      - MINIO_ROOT_USER=${MINIO_ROOT_USER}        # Логин (из .env или admin)
-      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD} # Пароль
+      - MINIO_ROOT_USER=${MINIO_ROOT_USER}
+      - MINIO_ROOT_PASSWORD=${MINIO_ROOT_PASSWORD}
     volumes:
-      - ./minio_data:/data   # Данные будут лежать в папке minio_data рядом с проектом
+      - ./minio_data:/data
     command: server /data --console-address ":9001"
     env_file:
       - .env
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
 
   app:
     build: .
     container_name: fastapi_app
+    restart: always
     ports:
       - "8000:8000"
     depends_on:
@@ -42,12 +52,14 @@ services:
     env_file:
       - .env
     environment:
-      # Важно: теперь приложение должно стучаться к db и minio
-      # по именам сервисов в сети Docker, а не по localhost!
       - DB_HOST=db
       - MINIO_ENDPOINT=http://minio:9000
-
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
 
 volumes:
   postgres_data:
-  minio_data:      # Добавляем том для MinIO
+  minio_data:
